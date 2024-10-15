@@ -10,12 +10,11 @@ const myServer = http
     }
     const log = `${Date.now()} ${req.url} Request recived\n`;
     const myUrl = url.parse(req.url, true);
-    console.log(myUrl);
 
     fs.appendFile("log.txt", log, (err, data) => {
       switch (myUrl.pathname) {
         case "/":
-          res.end("HomePage");
+          if (req.method === "GET") res.end("HomePage");
           break;
         case "/about":
           const userName = myUrl.query.name;
@@ -25,6 +24,14 @@ const myServer = http
         case "/search":
           const serchResult = myUrl.query.search_query;
           res.end("Here are your result for" + serchResult);
+
+        case "/signup":
+          if (req.method === "GET") res.end("Welcome to signup page");
+          else if (req.method === "POST") {
+            // DB query
+
+            res.end("Suceess");
+          }
         default:
           res.end("404 Not Found");
       }
